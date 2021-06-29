@@ -1,17 +1,17 @@
 import time
 import unittest
 import HTMLTestRunner
-
+from common.setting import filename1, case_path1, report_name
 
 # 获取所有测试用例
 def get_allcase():
     # 测试用例存放路径
-    case_path = 'E:/yim-api-test/APITest/TestCase'
-    # 获取路径下面所有包含test_*.py命名的测试用例
-    discover = unittest.defaultTestLoader.discover(case_path, pattern="test_*.py")
+    case_path = case_path1
+    # 获取路径下面所有包含test_*.py命名的测试用例（包括子文件下的测试用例）
+    discover_all_cases = unittest.defaultTestLoader.discover(case_path, pattern="test_*.py", top_level_dir=None)
     # 把测试用例加进测试用例集合suite
     suite = unittest.TestSuite()
-    suite.addTest(discover)
+    suite.addTest(discover_all_cases)
     # 返回用例集合suite
     return suite
 
@@ -19,7 +19,7 @@ def get_allcase():
 if __name__ == '__main__':
     # 运行测试用例
     timestr = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))  # 本地日期时间作为测试报告的名字
-    filename = 'E:/yim-api-test/APITest/report/' + 'API接口第二轮测试结果' + timestr + '.html'  # 这个路径改成自己的目录路径
+    filename = filename1 + report_name + timestr + '.html'  # 这个路径改成自己的目录路径
     fp = open(filename, 'wb')
     runner = HTMLTestRunner.HTMLTestRunner(
         stream=fp,

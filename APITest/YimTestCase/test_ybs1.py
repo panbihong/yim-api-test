@@ -5,7 +5,7 @@ import time
 from APITest.APImodule import module1
 
 # 这里是接口地址，必填
-url1 = ""
+url1 = "https://test-yim-api.yidejia.com"
 
 
 class TestYbs(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestYbs(unittest.TestCase):
 
         url = url1+"/share/message/to/yim"
 
-        payload = {"staff_id": 247, "chatroom_ids": [1905,1906,1907], "sign": sign,
+        payload = {"staff_id": 247, "chatroom_ids": [1905, 1906, 1907, 155693, 155694, 2863], "sign": sign,
                    "video_url": "https://p0.ssl.qhimgs1.com/t01bf6d38632d799096.jpg",
                    "title": "学院视频地址带token", "desc": "哈哈哈哈",
                    "href": "https://hao.360.com/?a1004", "project": "ybs"}
@@ -100,6 +100,29 @@ class TestYbs(unittest.TestCase):
         # 接口返回200，并且返回结果中'code': 0, 'message': '成功'
         self.assertEqual(200, response.status_code)
         self.assertIn(0, res2)
+        self.assertIn('成功', res4)
+
+    # ybs离职接口
+    def test_Leave(self):
+        # 参数sign，获取当前时间转化格式为2020-12-10，拼接参数值给MD5加密
+        date = time.strftime("%Y-%m-%d", time.localtime())
+        sign = module1.md5vale(date + "-ybs-495")
+        print(sign)
+        url = url1 + "/ybs/staff"
+
+        payload = {"staff_id": 495,  "sign": sign}
+        headers = {
+        }
+        # 发起json格式的post请求
+        response = requests.request("DELETE", url, params=payload, headers=headers)
+        result = response.json()
+        res2 = jsonpath.jsonpath(result, '$..code')
+        res3 = jsonpath.jsonpath(result, '$..data')
+        res4 = jsonpath.jsonpath(result, '$..message')
+        print(result)
+        # 接口返回200，并且返回结果中'code': 0, 'data': '分享成功', 'message': '成功'
+        self.assertEqual(200, response.status_code)
+
         self.assertIn('成功', res4)
 
     def tearDown(self):

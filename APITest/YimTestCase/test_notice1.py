@@ -6,7 +6,7 @@ import requests
 from APITest.APImodule import module1
 
 # 这里是接口地址，必填
-url1 = ""
+url1 = "https://test-yim-api.yidejia.com"
 
 
 class TestNotice(unittest.TestCase):
@@ -18,6 +18,11 @@ class TestNotice(unittest.TestCase):
     def test_case_new(self):
         # 获取当前时间戳毫秒级,str和int可以转换格式，方便拼接
         time1 = str(round(time.time() * 1000))
+        now_time = datetime.datetime.now()
+        end_times = (now_time + datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+        timeArray = time.strptime(end_times, "%Y-%m-%d %H:%M:%S")
+        timeStamp = int(time.mktime(timeArray))
+        time2 = str(round(timeStamp * 1000))
         data1 = ["测试公告001", "测试公告002", "测试公告003"]
 
         for i in data1:
@@ -31,8 +36,8 @@ class TestNotice(unittest.TestCase):
                        'content': "这是测试内容",
                        'organization_ids': "3",
                        'identity_type': "",
-                       'send_at': "1635600271000",
-                       'invalid_at': "1636600271000",
+                       'send_at': time1,
+                       'invalid_at': time2,
                        'is_dialog': "0"
                        }
             # 请求地址
@@ -54,6 +59,12 @@ class TestNotice(unittest.TestCase):
     # 编辑公告
     def test_case_editor(self):
         # 获取当前未发布公告的id，str和int可以转换时间格式，方便拼接
+        time1 = str(round(time.time() * 1000))
+        now_time = datetime.datetime.now()
+        end_times = (now_time + datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+        timeArray = time.strptime(end_times, "%Y-%m-%d %H:%M:%S")
+        timeStamp = int(time.mktime(timeArray))
+        time2 = str(round(timeStamp * 1000))
         gid = str(module1.getNoticeId())
         print(gid)
 
@@ -71,8 +82,8 @@ class TestNotice(unittest.TestCase):
                    'content': "这是修改内容",
                    'organization_ids': "3",
                    'identity_type': "",
-                   'send_at': "1635600271000",
-                   'invalid_at': "1636600271000",
+                   'send_at': time1,
+                   'invalid_at': time2,
                    'is_dialog': "0"
                    }
         # 请求地址
